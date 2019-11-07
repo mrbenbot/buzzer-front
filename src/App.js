@@ -27,8 +27,7 @@ function App() {
   }
 
   function buzz() {
-    const time = Date.now();
-    socket.emit("buzz", { name, time, id });
+    socket.emit("buzz", { name, id });
   }
 
   return (
