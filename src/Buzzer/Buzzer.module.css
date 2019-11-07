@@ -1,0 +1,21 @@
+.mainContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: bisque;
+  font-family: "Special Elite", cursive;
+  text-align: center;
+}
+
+.buzzButton {
+  background-color: red;
+  color: white;
+  font-size: 2em;
+  padding: 50px;
+  border-radius: 50%;
+  font-family: "Special Elite", cursive;
+}
+.buzzButton:active {
+  background-color: orange;
+}

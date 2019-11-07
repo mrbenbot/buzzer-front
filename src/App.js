@@ -1,25 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import socketIOClient from "socket.io-client";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+
+import ListView from "./ListView";
+import Buzzer from "./Buzzer";
+import "./App.css";
+
+const socket = socketIOClient(process.env.REACT_APP_URL || "192.168.0.96:5000");
+
+const id = `${Math.random()}`;
 
 function App() {
+  const [name, setName] = useState("");
+  const [list, setList] = useState([]);
+
+  socket.on("update", data => {
+    setList(data);
+  });
+
+  useEffect(() => {
+    socket.emit("get list");
+  }, []);
+
+  function reset() {
+    socket.emit("reset");
+  }
+
+  function buzz() {
+    const time = Date.now();
+    socket.emit("buzz", { name, time, id });
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/list">
+          <ListView list={list} reset={reset} />
+        </Route>
+        <Route path="/">
+          <Buzzer buzz={buzz} name={name} setName={setName} />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
